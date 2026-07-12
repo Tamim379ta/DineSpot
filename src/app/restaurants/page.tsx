@@ -31,24 +31,35 @@ export default function RestaurantsPage() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
-  const fetchRestaurants = async () => {
+ const fetchRestaurants = async () => {
     setLoading(true);
-    const params = new URLSearchParams();
-    if (search) params.append("search", search);
-    if (cuisine) params.append("cuisine", cuisine);
-    if (priceRange) params.append("priceRange", priceRange);
-    if (minRating) params.append("minRating", minRating);
-    if (sortBy) params.append("sortBy", sortBy);
-    params.append("page", page.toString());
-    params.append("limit", "8");
+    try {
+      const params = new URLSearchParams();
+      if (search) params.append("search", search);
+      if (cuisine) params.append("cuisine", cuisine);
+      if (priceRange) params.append("priceRange", priceRange);
+      if (minRating) params.append("minRating", minRating);
+      if (sortBy) params.append("sortBy", sortBy);
+      params.append("page", page.toString());
+      params.append("limit", "8");
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/restaurants?${params.toString()}`
-    );
-    const data = await res.json();
-    setRestaurants(data.restaurants);
-    setTotal(data.total);
-    setLoading(false);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/restaurants?${params.toString()}`
+      );
+
+      if (!res.ok) throw new Error("Server error");
+
+      const data = await res.json();
+      // Use optional fallback || [] to guarantee it's always an array
+      setRestaurants(data?.restaurants || []);
+      setTotal(data?.total || 0);
+    } catch (error) {
+      console.error("Failed to fetch restaurants:", error);
+      setRestaurants([]); // Fallback to safe empty array on failure
+      setTotal(0);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -170,7 +181,7 @@ export default function RestaurantsPage() {
                   <div key={i} className="bg-white rounded-xl h-72 animate-pulse" />
                 ))}
               </div>
-            ) : restaurants.length === 0 ? (
+          ) : !restaurants || restaurants.length === 0 ? (
               <div className="text-center py-24">
                 <p className="text-5xl mb-4">🍽️</p>
                 <h2 className="text-xl font-bold text-[#1C1C1E] mb-2">No restaurants found</h2>
