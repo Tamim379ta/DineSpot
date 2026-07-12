@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const publicLinks = [
   { label: "Home", href: "/" },
@@ -26,13 +28,14 @@ const ownerLinks = [
   { label: "Restaurants", href: "/restaurants" },
   { label: "My Restaurants", href: "/restaurants/manage" },
   { label: "Add Restaurant", href: "/restaurants/add" },
-  { label: "Blog", href: "/blog" },
+  { label: "Analytics", href: "/analytics" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const role = (session?.user as { role?: string })?.role;
 
@@ -44,6 +47,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     await signOut();
     router.push("/");
+    setMenuOpen(false);
   };
 
   return (
@@ -55,7 +59,7 @@ export default function Navbar() {
           🍽️ DineSpot
         </Link>
 
-        {/* Nav Links */}
+        {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
@@ -72,8 +76,8 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Auth Section */}
-        <div className="flex items-center gap-3">
+        {/* Desktop Auth Section */}
+        <div className="hidden md:flex items-center gap-3">
           {session ? (
             <>
               <span className="text-sm text-gray-300">
@@ -104,7 +108,66 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Mobile Hamburger */}
+        <button
+          className="md:hidden text-white text-xl"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-[#1C1C1E] border-t border-gray-700 px-6 py-4 space-y-4">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className={`block text-sm font-medium transition-colors ${
+                pathname === link.href
+                  ? "text-[#00B37D]"
+                  : "text-gray-300 hover:text-white"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          <div className="border-t border-gray-700 pt-4 space-y-3">
+            {session ? (
+              <>
+                <p className="text-sm text-gray-300">👋 {session.user.name}</p>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-sm font-semibold bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="block text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="block text-center text-sm font-semibold bg-[#00B37D] text-white px-4 py-2 rounded-lg hover:bg-[#00a070] transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 const cuisineOptions = [
   "Italian", "Chinese", "Indian", "Japanese", "Mexican",
@@ -90,190 +91,194 @@ export default function AddRestaurantPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F7F7] py-12">
-      <div className="max-w-3xl mx-auto px-6">
+    <ProtectedRoute allowedRole="owner">
+      <div className="min-h-screen bg-[#F7F7F7] py-12">
+        <div className="max-w-3xl mx-auto px-6">
 
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#1C1C1E]">Add Your Restaurant</h1>
-          <p className="text-gray-500 mt-1">Fill in the details to list your restaurant on DineSpot</p>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm p-8 space-y-6">
-
-          {/* Basic Info */}
-          <div>
-            <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Basic Information</h2>
-            <div className="space-y-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Restaurant Name"
-                value={form.name}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
-              />
-              <input
-                type="text"
-                name="shortDescription"
-                placeholder="Short Description (max 150 characters)"
-                value={form.shortDescription}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
-              />
-              <textarea
-                name="description"
-                placeholder="Full Description"
-                value={form.description}
-                onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors resize-none"
-              />
-            </div>
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-[#1C1C1E]">Add Your Restaurant</h1>
+            <p className="text-gray-500 mt-1">Fill in the details to list your restaurant on DineSpot</p>
           </div>
 
-          {/* Details */}
-          <div>
-            <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Restaurant Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <select
-                name="cuisine"
-                value={form.cuisine}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors text-gray-600"
-              >
-                <option value="">Select Cuisine</option>
-                {cuisineOptions.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+          <div className="bg-white rounded-2xl shadow-sm p-8 space-y-6">
 
-              <select
-                name="priceRange"
-                value={form.priceRange}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors text-gray-600"
-              >
-                <option value="">Select Price Range</option>
-                <option value="$">$ — Budget</option>
-                <option value="$$">$$ — Moderate</option>
-                <option value="$$$">$$$ — Expensive</option>
-                <option value="$$$$">$$$$ — Fine Dining</option>
-              </select>
-
-              <input
-                type="text"
-                name="city"
-                placeholder="City"
-                value={form.city}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
-              />
-
-              <input
-                type="text"
-                name="phone"
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
-              />
-
-              <input
-                type="text"
-                name="address"
-                placeholder="Full Address"
-                value={form.address}
-                onChange={handleChange}
-                className="md:col-span-2 w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
-              />
-            </div>
-          </div>
-
-          {/* Opening Hours */}
-          <div>
-            <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Opening Hours</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">Opening Time</label>
+            {/* Basic Info */}
+            <div>
+              <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Basic Information</h2>
+              <div className="space-y-4">
                 <input
-                  type="time"
-                  name="openTime"
-                  value={form.openTime}
+                  type="text"
+                  name="name"
+                  placeholder="Restaurant Name"
+                  value={form.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
                 />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">Closing Time</label>
                 <input
-                  type="time"
-                  name="closeTime"
-                  value={form.closeTime}
+                  type="text"
+                  name="shortDescription"
+                  placeholder="Short Description (max 150 characters)"
+                  value={form.shortDescription}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
                 />
+                <textarea
+                  name="description"
+                  placeholder="Full Description"
+                  value={form.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors resize-none"
+                />
               </div>
             </div>
-          </div>
 
-          {/* Cover Image */}
-          <div>
-            <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Cover Image</h2>
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-lg cursor-pointer hover:border-[#00B37D] transition-colors">
-              {imageUploading ? (
-                <p className="text-sm text-gray-400">Uploading...</p>
-              ) : form.coverImage ? (
-                <img
-                  src={form.coverImage}
-                  alt="Preview"
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              ) : (
-                <div className="text-center">
-                  <p className="text-2xl mb-2">📷</p>
-                  <p className="text-sm text-gray-400">Click to upload cover image</p>
-                  <p className="text-xs text-gray-300 mt-1">PNG, JPG up to 10MB</p>
-                </div>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </label>
-          </div>
-
-          {/* Amenities */}
-          <div>
-            <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Amenities</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {amenityOptions.map((amenity) => (
-                <button
-                  key={amenity}
-                  onClick={() => toggleAmenity(amenity)}
-                  className={`px-3 py-2 rounded-lg border text-sm font-medium transition-all ${form.amenities.includes(amenity)
-                    ? "border-[#00B37D] bg-[#F0FAF6] text-[#00B37D]"
-                    : "border-gray-200 text-gray-600 hover:border-gray-300"
-                    }`}
+            {/* Details */}
+            <div>
+              <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Restaurant Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <select
+                  name="cuisine"
+                  value={form.cuisine}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors text-gray-600"
                 >
-                  {amenity}
-                </button>
-              ))}
+                  <option value="">Select Cuisine</option>
+                  {cuisineOptions.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+
+                <select
+                  name="priceRange"
+                  value={form.priceRange}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors text-gray-600"
+                >
+                  <option value="">Select Price Range</option>
+                  <option value="$">$ — Budget</option>
+                  <option value="$$">$$ — Moderate</option>
+                  <option value="$$$">$$$ — Expensive</option>
+                  <option value="$$$$">$$$$ — Fine Dining</option>
+                </select>
+
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  value={form.city}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
+                />
+
+                <input
+                  type="text"
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={form.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
+                />
+
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Full Address"
+                  value={form.address}
+                  onChange={handleChange}
+                  className="md:col-span-2 w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
+                />
+              </div>
             </div>
+
+            {/* Opening Hours */}
+            <div>
+              <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Opening Hours</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Opening Time</label>
+                  <input
+                    type="time"
+                    name="openTime"
+                    value={form.openTime}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Closing Time</label>
+                  <input
+                    type="time"
+                    name="closeTime"
+                    value={form.closeTime}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-[#00B37D] transition-colors"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Cover Image */}
+            <div>
+              <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Cover Image</h2>
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-lg cursor-pointer hover:border-[#00B37D] transition-colors">
+                {imageUploading ? (
+                  <p className="text-sm text-gray-400">Uploading...</p>
+                ) : form.coverImage ? (
+                  <img
+                    src={form.coverImage}
+                    alt="Preview"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                ) : (
+                  <div className="text-center">
+                    <p className="text-2xl mb-2">📷</p>
+                    <p className="text-sm text-gray-400">Click to upload cover image</p>
+                    <p className="text-xs text-gray-300 mt-1">PNG, JPG up to 10MB</p>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {/* Amenities */}
+            <div>
+              <h2 className="text-lg font-bold text-[#1C1C1E] mb-4">Amenities</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {amenityOptions.map((amenity) => (
+                  <button
+                    key={amenity}
+                    onClick={() => toggleAmenity(amenity)}
+                    className={`px-3 py-2 rounded-lg border text-sm font-medium transition-all ${form.amenities.includes(amenity)
+                      ? "border-[#00B37D] bg-[#F0FAF6] text-[#00B37D]"
+                      : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                  >
+                    {amenity}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              onClick={handleSubmit}
+              className="w-full bg-[#00B37D] text-white font-semibold py-3 rounded-lg hover:bg-[#00a070] transition-colors"
+            >
+              Add Restaurant
+            </button>
+
           </div>
-
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            className="w-full bg-[#00B37D] text-white font-semibold py-3 rounded-lg hover:bg-[#00a070] transition-colors"
-          >
-            Add Restaurant
-          </button>
-
         </div>
       </div>
-    </div>
+
+
+    </ProtectedRoute>
   );
 }
