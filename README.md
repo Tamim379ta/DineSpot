@@ -1,36 +1,228 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍽️ DineSpot — Restaurant Discovery & Table Booking Platform
 
-## Getting Started
+A full-stack restaurant discovery and table booking platform built with **Next.js**, **Express.js**, **MongoDB**, and **TypeScript**. Users can explore restaurants, filter by cuisine and price, and book tables online. Restaurant owners can list and manage their restaurants through a dedicated dashboard.
 
-First, run the development server:
+![DineSpot](https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200)
+
+## 🚀 Live Demo
+
+- **Frontend:** [dinespot.vercel.app](https://dine-spot-eta.vercel.app/)
+- **Backend:** [dinespot-server.onrender.com](https://dine-spot-server-chi.vercel.app/)
+
+### Demo Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| Diner | diner@dinespot.com | Demo@1234 |
+| Owner | owner@dinespot.com | Demo@1234 |
+
+---
+
+## ✨ Features
+
+### For Diners
+- Browse and search restaurants by name, cuisine, city, and price range
+- Filter by minimum rating and sort by newest or highest rated
+- View detailed restaurant profiles with amenities, location, and opening hours
+- Book a table with date, time, party size, and special requests
+- Track and cancel bookings from personal dashboard
+- Leave reviews and ratings for visited restaurants
+
+### For Owners
+- Register as a restaurant owner and list restaurants
+- Upload cover images via ImgBB
+- Manage restaurant listings (view, delete)
+- View analytics dashboard with booking and review charts (Recharts)
+- Track bookings made at their restaurants
+
+### General
+- JWT-based authentication with Better Auth
+- Role-based access control (Diner / Owner)
+- Fully responsive — mobile, tablet, desktop
+- Skeleton loaders on all data-fetching components
+- 404 and loading pages
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|------------|---------|
+| Next.js 14 (App Router) | React framework |
+| TypeScript | Type-safe development |
+| Tailwind CSS | Utility-first styling |
+| Better Auth | Authentication |
+| Framer Motion | Animations |
+| Recharts | Analytics charts |
+| React Fast Marquee | Testimonials slider |
+| React Icons | Icon library |
+| ImgBB API | Image uploads |
+
+### Backend
+| Technology | Purpose |
+|------------|---------|
+| Node.js + Express.js | REST API |
+| TypeScript | Type-safe backend |
+| MongoDB (Native Driver) | Database |
+| Better Auth | Session management |
+
+---
+
+## 📁 Project Structure
+
+```
+dinespot/
+├── dinespot-client/          # Next.js Frontend
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── (auth)/       # Login, Register
+│   │   │   ├── (protected)/  # Add & Manage Restaurants
+│   │   │   ├── restaurants/  # Listing & Details
+│   │   │   ├── bookings/     # My Bookings
+│   │   │   ├── analytics/    # Owner Analytics
+│   │   │   ├── about/
+│   │   │   ├── blog/
+│   │   │   └── contact/
+│   │   ├── components/
+│   │   │   ├── home/         # Hero, Cuisines, Stats, etc.
+│   │   │   └── shared/       # Navbar, Footer, ProtectedRoute
+│   │   └── lib/
+│   │       ├── auth.ts       # Better Auth config
+│   │       └── auth-client.ts
+│
+└── dinespot-server/          # Express.js Backend
+    └── src/
+        ├── config/           # MongoDB connection
+        ├── controllers/      # Business logic
+        ├── routes/           # API routes
+        └── app.ts            # Entry point
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Restaurants
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/restaurants` | Get all restaurants (search, filter, sort, paginate) |
+| GET | `/api/restaurants/:id` | Get single restaurant |
+| GET | `/api/restaurants/owner?ownerId=` | Get owner's restaurants |
+| POST | `/api/restaurants` | Create restaurant |
+| DELETE | `/api/restaurants/:id` | Delete restaurant |
+
+### Bookings
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/bookings` | Create booking |
+| GET | `/api/bookings/diner?userId=` | Get diner's bookings |
+| GET | `/api/bookings/restaurant/:id` | Get restaurant's bookings |
+| DELETE | `/api/bookings/:id` | Cancel booking |
+
+### Reviews
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/reviews/:restaurantId` | Get restaurant reviews |
+| POST | `/api/reviews` | Submit review |
+| DELETE | `/api/reviews/:id` | Delete review |
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+- Node.js 20+
+- MongoDB Atlas account
+- ImgBB API key
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/dinespot.git
+cd dinespot
+```
+
+### 2. Setup Backend
+
+```bash
+cd dinespot-server
+npm install
+```
+
+Create `.env`:
+
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+CLIENT_URL=http://localhost:3000
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Setup Frontend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd dinespot-client
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local`:
 
-## Learn More
+```env
+BETTER_AUTH_SECRET=your_secret_key
+BETTER_AUTH_URL=http://localhost:3000
+MONGODB_URI=your_mongodb_connection_string
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_IMGBB_API_KEY=your_imgbb_api_key
+```
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Visit `http://localhost:3000` 🚀
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🚢 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Service | Platform |
+|---------|----------|
+| Frontend | Vercel |
+| Backend | Render |
+| Database | MongoDB Atlas |
+| Images | ImgBB |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🎨 Color Palette
+
+| Role | Color | Hex |
+|------|-------|-----|
+| Primary | Green | `#00B37D` |
+| Dark | Near Black | `#1C1C1E` |
+| Accent | Orange | `#FF6B35` |
+| Neutral | Off White | `#F7F7F7` |
+
+---
+
+## 📸 Screenshots
+
+> Add screenshots of your app here after deployment.
+
+---
+
+## 👨‍💻 Author
+
+**Tamim** — Full Stack Developer
+- GitHub: [@Tamim379ta](https://github.com/Tamim379ta)
+- LinkedIn: [linkedin.com/in/tamimtahsan](https://linkedin.com/in/tamimtahsan)
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
