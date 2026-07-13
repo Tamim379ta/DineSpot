@@ -5,10 +5,6 @@ import { MongoClient } from "mongodb";
 const client = new MongoClient(process.env.MONGODB_URI as string);
 const db = client.db("dinespot");
 
-const productionUrl = process.env.BETTER_AUTH_URL || "";
-const origins = ["http://localhost:3000"];
-if (productionUrl) origins.push(productionUrl);
-
 export const auth = betterAuth({
   database: mongodbAdapter(db),
   emailAndPassword: {
@@ -24,5 +20,8 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: origins,
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://dine-spot-eta.vercel.app",
+  ],
 });
