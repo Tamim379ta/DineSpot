@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function HeroSection() {
   return (
     <section
-      className="relative w-full h-[90vh] flex items-center justify-center"
+      className="relative w-full h-[80vh] flex items-center justify-center"
       style={{
         backgroundImage: "url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600')",
         backgroundSize: "cover",
