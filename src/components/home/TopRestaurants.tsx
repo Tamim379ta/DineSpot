@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface Restaurant {
   _id: string;
@@ -66,9 +67,11 @@ export default function TopRestaurants() {
               >
                 {/* Image */}
                 <div className="relative h-48 w-full">
-                  <img
+                  <Image
                     src={r.coverImage}
                     alt={r.name}
+                     width={600}
+                height={500}
                     className="w-full h-full object-cover"
                   />
                   <span className="absolute top-3 left-3 bg-[#00B37D] text-white text-xs font-semibold px-2 py-1 rounded-full">

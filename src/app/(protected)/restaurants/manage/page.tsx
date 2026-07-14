@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import Image from "next/image";
+import toast from "react-hot-toast";
 
 interface Restaurant {
   _id: string;
@@ -21,6 +23,8 @@ export default function ManageRestaurantsPage() {
   const { data: session } = useSession();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchRestaurants = async () => {
     if (!session?.user.id) return;
@@ -36,13 +40,19 @@ export default function ManageRestaurantsPage() {
     fetchRestaurants();
   }, [session]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this restaurant?")) return;
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurants/${id}`, {
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    setDeleting(true);
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/restaurants/${deleteId}`, {
       method: "DELETE",
     });
+    toast.success("Restaurant deleted");
+    setDeleteId(null);
+    setDeleting(false);
     fetchRestaurants();
   };
+
+  const deletingRestaurant = restaurants.find((r) => r._id === deleteId);
 
   return (
     <ProtectedRoute allowedRole="owner">
@@ -86,9 +96,11 @@ export default function ManageRestaurantsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {restaurants.map((r) => (
                 <div key={r._id} className="bg-white rounded-xl overflow-hidden shadow-sm">
-                  <img
+                  <Image
                     src={r.coverImage}
                     alt={r.name}
+                    width={50}
+                    height={50}
                     className="w-full h-44 object-cover"
                   />
                   <div className="p-4">
@@ -109,7 +121,7 @@ export default function ManageRestaurantsPage() {
                         View
                       </Link>
                       <button
-                        onClick={() => handleDelete(r._id)}
+                        onClick={() => setDeleteId(r._id)}
                         className="flex-1 text-sm font-semibold border border-red-400 text-red-400 py-2 rounded-lg hover:bg-red-50 transition-colors"
                       >
                         Delete
@@ -123,6 +135,63 @@ export default function ManageRestaurantsPage() {
 
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                <span className="text-xl">🗑️</span>
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-[#1C1C1E]">Delete Restaurant</h2>
+                <p className="text-sm text-gray-500">This action cannot be undone</p>
+              </div>
+            </div>
+
+            {deletingRestaurant && (
+              <div className="bg-[#F7F7F7] rounded-xl p-4 mb-6 flex items-center gap-3">
+                <Image
+                  src={deletingRestaurant.coverImage}
+                  alt={deletingRestaurant.name}
+                  width={56}
+                  height={56}
+                  className="w-14 h-14 rounded-lg object-cover shrink-0"
+                />
+                <div className="text-sm">
+                  <p className="font-semibold text-[#1C1C1E]">{deletingRestaurant.name}</p>
+                  <p className="text-gray-500">🍴 {deletingRestaurant.cuisine} &nbsp;📍 {deletingRestaurant.city}</p>
+                  <p className="text-gray-500">⭐ {deletingRestaurant.averageRating} &nbsp;{deletingRestaurant.priceRange}</p>
+                </div>
+              </div>
+            )}
+
+            <p className="text-sm text-gray-500 mb-6">
+              Are you sure you want to permanently delete this restaurant? All associated data will be removed.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteId(null)}
+                disabled={deleting}
+                className="flex-1 border border-gray-200 text-gray-600 font-semibold py-2.5 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                Keep It
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex-1 bg-red-500 text-white font-semibold py-2.5 rounded-xl hover:bg-red-600 transition-colors disabled:opacity-50"
+              >
+                {deleting ? "Deleting..." : "Yes, Delete"}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </ProtectedRoute>
   );
 }

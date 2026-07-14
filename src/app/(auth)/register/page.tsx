@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -28,18 +29,20 @@ export default function RegisterPage() {
       return;
     }
     setLoading(true);
- // @ts-ignore
-const { error } = await signUp.email({
-  name: form.name,
-  email: form.email,
-  password: form.password,
-  role: form.role,
-});
+    // @ts-ignore
+    const { error } = await signUp.email({
+      name: form.name,
+      email: form.email,
+      password: form.password,
+      role: form.role,
+    });
     setLoading(false);
     if (error) {
       setError(error.message || "Something went wrong");
+      toast.error("Something went wrong")
       return;
     }
+    toast.success("Account Create Successfully")
     router.push("/");
   };
 
@@ -58,8 +61,8 @@ const { error } = await signUp.email({
           <button
             onClick={() => setForm({ ...form, role: "diner" })}
             className={`p-4 rounded-xl border-2 text-center transition-all ${form.role === "diner"
-                ? "border-[#00B37D] bg-[#F0FAF6]"
-                : "border-gray-200 hover:border-gray-300"
+              ? "border-[#00B37D] bg-[#F0FAF6]"
+              : "border-gray-200 hover:border-gray-300"
               }`}
           >
             <div className="text-2xl mb-1">🍽️</div>
@@ -69,8 +72,8 @@ const { error } = await signUp.email({
           <button
             onClick={() => setForm({ ...form, role: "owner" })}
             className={`p-4 rounded-xl border-2 text-center transition-all ${form.role === "owner"
-                ? "border-[#00B37D] bg-[#F0FAF6]"
-                : "border-gray-200 hover:border-gray-300"
+              ? "border-[#00B37D] bg-[#F0FAF6]"
+              : "border-gray-200 hover:border-gray-300"
               }`}
           >
             <div className="text-2xl mb-1">🏪</div>

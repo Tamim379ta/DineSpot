@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Restaurant {
   _id: string;
@@ -50,12 +51,11 @@ export default function RestaurantsPage() {
       if (!res.ok) throw new Error("Server error");
 
       const data = await res.json();
-      // Use optional fallback || [] to guarantee it's always an array
       setRestaurants(data?.restaurants || []);
       setTotal(data?.total || 0);
     } catch (error) {
       console.error("Failed to fetch restaurants:", error);
-      setRestaurants([]); // Fallback to safe empty array on failure
+      setRestaurants([]); 
       setTotal(0);
     } finally {
       setLoading(false);
@@ -191,9 +191,11 @@ export default function RestaurantsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {restaurants.map((r) => (
                   <div key={r._id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                    <img
+                    <Image
                       src={r.coverImage}
                       alt={r.name}
+                      width={500}
+                      height={500}
                       className="w-full h-48 object-cover"
                     />
                     <div className="p-4">

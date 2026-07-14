@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
+import toast from "react-hot-toast";
+import Image from "next/image";
+
 
 interface Restaurant {
   _id: string;
@@ -130,9 +133,10 @@ export default function RestaurantDetailsPage() {
     setBookingLoading(false);
 
     if (res.ok) {
+      toast.success("Booking Sent Successfully")
       setBookingSuccess(true);
     } else {
-      alert("Failed to book. Please try again.");
+      toast.error("Failed to book. Please try again.")
     }
   };
 
@@ -162,9 +166,11 @@ export default function RestaurantDetailsPage() {
 
       {/* Hero Image */}
       <div className="w-full h-80 relative">
-        <img
+        <Image
           src={restaurant.coverImage}
           alt={restaurant.name}
+          width={1000}
+          height={500}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40" />

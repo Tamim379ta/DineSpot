@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,8 +29,10 @@ export default function LoginPage() {
     setLoading(false);
     if (error) {
       setError(error.message || "Invalid email or password");
+      toast.error("Invalid email or password")
       return;
     }
+    toast.success("Login Successfully")
     router.push("/");
   };
 

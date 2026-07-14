@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
+
 
 const blogs = [
   {
@@ -61,9 +63,11 @@ export default function BlogSection() {
               className="rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow"
             >
               {/* Image */}
-              <img
+              <Image
                 src={blog.image}
                 alt={blog.title}
+                width={600}
+                height={500}
                 className="w-full h-48 object-cover"
               />
 

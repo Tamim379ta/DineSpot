@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
+import toast from "react-hot-toast";
 
 const cuisineOptions = [
   "Italian", "Chinese", "Indian", "Japanese", "Mexican",
@@ -83,10 +84,10 @@ export default function AddRestaurantPage() {
     const data = await res.json();
 
     if (res.ok) {
-      alert("Restaurant added successfully! 🎉");
+      toast.success("Restaurant added successfully! 🎉")
       router.push("/restaurants/manage");
     } else {
-      alert(data.error || "Something went wrong");
+      toast.error("Something went wrong")
     }
   };
 
